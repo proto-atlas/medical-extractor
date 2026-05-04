@@ -117,9 +117,8 @@ medical-extractor は架空の医療文書を入力として、Anthropic Claude 
 
 | 種別 | 範囲 | 件数 |
 |---|---|---|
-| Vitest unit (node env) | `lib/auth` / `rate-limit` / `soap-schema` / `samples` / `exporters` | 47 |
-| Vitest unit (happy-dom env) | `lib/speech-recognition` / `privacy` | 11 |
-| Playwright E2E (chromium) | auth (3) + privacy (3) + extract (3、`/api/extract` モック) | 9 |
+| Vitest unit / route / UI | auth / rate-limit / SOAP schema / samples / exporters / speech / privacy / API routes / eval helpers | 137 |
+| Playwright E2E (chromium) | auth / privacy / extract / axe a11y / target-size / cross-browser smoke | 19 |
 | カバレッジ閾値 | lines 60% / functions 70% / branches 50% / statements 60% | - |
 
 E2E はマルチブラウザ (firefox / webkit / mobile-chrome / mobile-safari) も Playwright config に登録済み。CI では Chromium のみ走らせ、他は手動 / 必要時実行。
