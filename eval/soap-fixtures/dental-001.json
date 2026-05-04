@@ -1,0 +1,31 @@
+{
+  "id": "dental-001",
+  "specialty": "dental",
+  "description": "冷温水痛で来院した架空例 (src/lib/samples.ts dental と同等)",
+  "documentText": "40代男性、右下奥歯の冷温水痛で来院。1 週間前から自覚あり、徐々に痛みが強くなっている。\n触診では下顎右側 7 番に軽度の動揺あり、打診痛軽度。視診で深いう蝕を確認。\nレントゲン所見では右下 7 番の根尖部に透過像、歯髄への到達が疑われる。\nう蝕 C3 相当、歯髄炎による疼痛と判断。神経処置 (根管治療) が必要。\n次回根管治療予約 (1 週後)、抗生剤 (アモキシシリン 250mg) と鎮痛薬を 3 日分処方。\nセルフケアとして冷温刺激を避けるよう指示。",
+  "expected": {
+    "subjective": {
+      "shouldContain": ["冷温水痛"]
+    },
+    "objective": {
+      "shouldContain": ["7 番"]
+    },
+    "assessment": {
+      "shouldContain": ["う蝕"]
+    },
+    "plan": {
+      "shouldContain": ["根管治療"]
+    }
+  },
+  "domainNotes": {
+    "fhirCandidates": {
+      "subjective": "Observation (category: social-history)",
+      "objective": "Observation (category: exam) + ImagingStudy 候補",
+      "assessment": "Condition (歯科は ICD-10 K00-K14 系、SNOMED CT 80967001 等が想定されるが、コード付与は範囲外)",
+      "plan": "CarePlan (procedure 系) + MedicationRequest"
+    },
+    "icd10NotApplicable": true,
+    "scope": "structural-extraction-only",
+    "diagnosticAdvice": false
+  }
+}

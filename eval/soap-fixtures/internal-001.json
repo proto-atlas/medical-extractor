@@ -1,0 +1,31 @@
+{
+  "id": "internal-001",
+  "specialty": "internal",
+  "description": "頭痛・発熱で来院した架空例 (src/lib/samples.ts internal と同等)",
+  "documentText": "40代女性、3日前から続く頭痛と37.8度の発熱を主訴に来院。\n咳嗽軽度あり。鼻汁・咽頭痛なし。倦怠感あり、食欲低下あり。\n体温 37.8℃、脈拍 88/分、血圧 118/72 mmHg、SpO2 98%。\n咽頭発赤軽度、扁桃腫脹なし。頚部リンパ節腫脹なし。胸部聴診で雑音なし。\nインフルエンザ迅速検査陰性、白血球 5,200/μL、CRP 0.8 mg/dL。\nウイルス性上気道炎の可能性が高いが、症状持続を考慮しフォロー要。\n解熱鎮痛薬を屯用処方、十分な水分摂取と安静を指示。3 日後再診予約。",
+  "expected": {
+    "subjective": {
+      "shouldContain": ["頭痛", "発熱"]
+    },
+    "objective": {
+      "shouldContain": ["37.8"]
+    },
+    "assessment": {
+      "shouldContain": ["上気道炎"]
+    },
+    "plan": {
+      "shouldContain": ["再診"]
+    }
+  },
+  "domainNotes": {
+    "fhirCandidates": {
+      "subjective": "Observation (category: social-history) または Condition.note",
+      "objective": "Observation (category: vital-signs / laboratory)",
+      "assessment": "Condition (clinicalStatus / verificationStatus 必要、コード付与は範囲外)",
+      "plan": "CarePlan または ServiceRequest"
+    },
+    "icd10NotApplicable": true,
+    "scope": "structural-extraction-only",
+    "diagnosticAdvice": false
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "ophthalmology-001",
+  "specialty": "ophthalmology",
+  "description": "視力低下で来院した架空例 (src/lib/samples.ts ophthalmology と同等)",
+  "documentText": "60代男性、3 ヶ月前から右眼の霞視と視力低下を自覚し来院。\n痛み・充血なし。糖尿病の既往なし。高血圧で内服加療中。\n裸眼視力 右 0.4 / 左 1.0、矯正視力 右 0.5 / 左 1.2。眼圧 右 14 / 左 13 mmHg。\n細隙灯顕微鏡で右眼水晶体に皮質混濁あり、左眼は軽度核混濁のみ。\n眼底検査では両眼ともに視神経乳頭陥凹比 0.3 で病的所見なし、網膜・黄斑部に異常所見なし。\n右眼の加齢性白内障 (皮質型) と診断。視機能低下が日常生活に支障をきたしているため手術適応。\n白内障手術の説明を実施、後日紹介状を作成し連携施設で手術予約予定。\n本日は点眼薬 (抗炎症点眼) を 2 週間分処方、症状増悪時は速やかに来院するよう指示。",
+  "expected": {
+    "subjective": {
+      "shouldContain": ["視力低下"]
+    },
+    "objective": {
+      "shouldContain": ["皮質混濁"]
+    },
+    "assessment": {
+      "shouldContain": ["白内障"]
+    },
+    "plan": {
+      "shouldContain": ["手術"]
+    }
+  },
+  "domainNotes": {
+    "fhirCandidates": {
+      "subjective": "Observation (category: social-history)",
+      "objective": "Observation (category: exam) + 視力 / 眼圧の Quantity 構造化候補",
+      "assessment": "Condition (眼科は ICD-10 H00-H59 系、白内障は H25-H26 系が想定されるが、コード付与は範囲外)",
+      "plan": "ServiceRequest (手術紹介) + MedicationRequest (点眼薬)"
+    },
+    "icd10NotApplicable": true,
+    "scope": "structural-extraction-only",
+    "diagnosticAdvice": false
+  }
+}

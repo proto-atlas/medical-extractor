@@ -1,0 +1,91 @@
+{
+  "target": "https://medical-extractor.atlas-lab.workers.dev",
+  "runAt": "2026-04-29T08:15:11.262Z",
+  "burstRateLimit": false,
+  "staticRoutes": [
+    {
+      "url": "https://medical-extractor.atlas-lab.workers.dev/",
+      "status": 200,
+      "expectedStatus": 200,
+      "pass": true,
+      "headersFound": {
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "camera=(), microphone=(self), geolocation=()",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+      },
+      "headersMissing": [],
+      "headersForbidden": {}
+    },
+    {
+      "url": "https://medical-extractor.atlas-lab.workers.dev/icon.svg",
+      "status": 200,
+      "expectedStatus": 200,
+      "pass": true,
+      "headersFound": {
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "camera=(), microphone=(self), geolocation=()",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+      },
+      "headersMissing": [],
+      "headersForbidden": {}
+    },
+    {
+      "url": "https://medical-extractor.atlas-lab.workers.dev/opengraph-image.svg",
+      "status": 200,
+      "expectedStatus": 200,
+      "pass": true,
+      "headersFound": {
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "camera=(), microphone=(self), geolocation=()",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "content-security-policy": "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+      },
+      "headersMissing": [],
+      "headersForbidden": {}
+    },
+    {
+      "url": "https://medical-extractor.atlas-lab.workers.dev/_not-found",
+      "status": 404,
+      "expectedStatus": 404,
+      "pass": true,
+      "headersFound": {
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "camera=(), microphone=(self), geolocation=()",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+      },
+      "headersMissing": [],
+      "headersForbidden": {}
+    }
+  ],
+  "authUnauth": {
+    "url": "https://medical-extractor.atlas-lab.workers.dev/api/auth",
+    "status": 401,
+    "expectedStatus": 401,
+    "body": {
+      "error": "unauthorized"
+    },
+    "pass": true
+  },
+  "extractUnauth": {
+    "url": "https://medical-extractor.atlas-lab.workers.dev/api/extract",
+    "status": 401,
+    "expectedStatus": 401,
+    "body": {
+      "error": "unauthorized"
+    },
+    "pass": true
+  },
+  "authBurst": null,
+  "extractBurst": null
+}

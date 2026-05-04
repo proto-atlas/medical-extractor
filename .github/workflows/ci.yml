@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # coverage gate を CI で強制する。
+      # `npm run test` ではなく `npm run test:coverage` で vitest.config.ts の閾値を CI で実行。
+      - name: Test (with coverage gate)
+        run: npm run test:coverage
+
+      # high 以上の脆弱性をブロック。moderate は既知制約として docs/evidence に記録する。
+      - name: npm audit (high or above)
+        run: npm audit --audit-level=high
+
+      - name: Check for secret patterns (CI-safe subset)
+        run: bash scripts/check-secrets.sh
+
+      - name: Build
+        run: npm run build
+
+      # CI で screenshots は再生成せず、証跡ファイルの存在のみ検査する。
+      - name: Verify evidence presence
+        run: npm run verify:evidence
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality-gate
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: npm run build
+
+      - name: Run Playwright tests
+        run: npm run e2e -- --project=chromium
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+  e2e-smoke-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality-gate
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [firefox, webkit, mobile-chrome, mobile-safari]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Build
+        run: npm run build
+
+      - name: Run cross-browser smoke
+        run: npm run e2e -- e2e/cross-browser-smoke.spec.ts --project=${{ matrix.project }}
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 14
+
+  deploy:
+    # main ブランチへの push のみ deploy する。PR ビルドではスキップ。
+    # Cloudflare secrets が未設定の場合は手動 deploy にフォールバック。
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [quality-gate, e2e, e2e-smoke-matrix]
+    environment: production
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    steps:
+      - name: Skip deploy when Cloudflare secrets are absent
+        if: ${{ env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == '' }}
+        run: echo "Cloudflare deploy skipped because CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID is not configured."
+
+      - name: Checkout
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}
+        run: npm ci
+
+      - name: Build for Cloudflare Workers
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}
+        run: |
+          npx next build --webpack
+          npx opennextjs-cloudflare build --skipNextBuild
+
+      - name: Deploy to Cloudflare Workers
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ env.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+          # secret は wrangler secret put で個別管理 (ACCESS_PASSWORD / ANTHROPIC_API_KEY)。
+          # 当ジョブはコード + アセットの deploy のみ担当する。
+          command: deploy

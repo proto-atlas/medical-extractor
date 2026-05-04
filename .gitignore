@@ -1,0 +1,57 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+build/
+.next/
+.nuxt/
+.output/
+
+# test output
+coverage/
+playwright-report/
+test-results/
+*.log
+.wrangler-tail.log
+
+# env
+.env
+.env.local
+.env.*.local
+.dev.vars
+cloudflare-env.d.ts
+
+# editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cloudflare Workers / OpenNext
+.wrangler/
+.open-next/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# logs / debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# npm postinstall で生成される pdfjs worker (scripts/copy-pdf-worker.mjs)
+public/pdf.worker.min.mjs
+
+# temp / MCP
+.playwright-mcp/
+
+# husky
+.husky/_/
