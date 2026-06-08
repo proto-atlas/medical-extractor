@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+/* class戦略のdark variant（v4 公式）。
+ * <html class="dark"> で切替、デフォルトはlayout.tsxのinline scriptで
+ * localStorage / prefers-color-schemeから解決。 */
+@custom-variant dark (&:where(.dark, .dark *));
