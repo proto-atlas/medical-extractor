@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+.output/
+.open-next/
+.wrangler/
+coverage/
+playwright-report/
+test-results/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+*.md
+
+# Next.js 管理ファイル（自動生成・自動更新されるため Prettier 対象外）
+tsconfig.json
+next-env.d.ts

@@ -1,0 +1,59 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "medical-extractor",
+  // 2026-04-26 時点の安定版に追従。後方互換はCloudflare側で保証されるが
+  // 古すぎるdateはランタイムfixを取りこぼす可能性。
+  "compatibility_date": "2026-04-15",
+  "compatibility_flags": [
+    "nodejs_compat",
+    // 外部fetchをpublicなネットワークに強制 (内部bindingを間違えて叩かない安全装置)。
+    // citation-reader / nuxt-ai-blogと同方針で維持。
+    "global_fetch_strictly_public",
+  ],
+  // workers.devサブドメインで公開する (確認時用のデモURLを共有する用途)。
+  // 明示しておかないとdeploy警告が出る。
+  "workers_dev": true,
+  // Preview URLsは本番運用で漏洩経路になり得る (意図しないURLから本番APIを叩ける)。
+  // このプロジェクトでは無効化する方針。
+  "preview_urls": false,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  // Cloudflare Workers Rate Limiting binding。
+  // namespace_idはアカウント内で一意にする任意の正整数文字列。
+  // auth / extract-auth / extractを分け、本番でもisolateをまたいで同一scopeの429を検証できるようにする。
+  "ratelimits": [
+    {
+      "name": "AUTH_RATE_LIMITER",
+      "namespace_id": "2042901",
+      "simple": {
+        "limit": 5,
+        "period": 60,
+      },
+    },
+    {
+      "name": "EXTRACT_AUTH_RATE_LIMITER",
+      "namespace_id": "2042902",
+      "simple": {
+        "limit": 10,
+        "period": 60,
+      },
+    },
+    {
+      "name": "EXTRACT_RATE_LIMITER",
+      "namespace_id": "2042903",
+      "simple": {
+        "limit": 5,
+        "period": 60,
+      },
+    },
+  ],
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "medical-extractor",
+    },
+  ],
+}
