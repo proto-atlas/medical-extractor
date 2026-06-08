@@ -1,0 +1,129 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@aws-sdk/xml-builder": {
+      "name": "@aws-sdk/xml-builder",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": ["fast-xml-parser"],
+      "effects": [],
+      "range": "3.894.0 - 3.972.18",
+      "nodes": ["node_modules/@aws-sdk/xml-builder"],
+      "fixAvailable": true
+    },
+    "@opennextjs/aws": {
+      "name": "@opennextjs/aws",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": ["next"],
+      "effects": ["@opennextjs/cloudflare"],
+      "range": ">=3.9.5",
+      "nodes": ["node_modules/@opennextjs/aws"],
+      "fixAvailable": {
+        "name": "@opennextjs/cloudflare",
+        "version": "1.14.1",
+        "isSemVerMajor": true
+      }
+    },
+    "@opennextjs/cloudflare": {
+      "name": "@opennextjs/cloudflare",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": ["@opennextjs/aws", "next"],
+      "effects": [],
+      "range": "0.3.0 - 0.6.6 || >=1.14.2",
+      "nodes": ["node_modules/@opennextjs/cloudflare"],
+      "fixAvailable": {
+        "name": "@opennextjs/cloudflare",
+        "version": "1.14.1",
+        "isSemVerMajor": true
+      }
+    },
+    "fast-xml-parser": {
+      "name": "fast-xml-parser",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1116957,
+          "name": "fast-xml-parser",
+          "dependency": "fast-xml-parser",
+          "title": "fast-xml-parser XMLBuilder: XML Comment and CDATA Injection via Unescaped Delimiters",
+          "url": "https://github.com/advisories/GHSA-gh4j-gqv2-49f6",
+          "severity": "moderate",
+          "cwe": ["CWE-91"],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": "<5.7.0"
+        }
+      ],
+      "effects": ["@aws-sdk/xml-builder"],
+      "range": "<5.7.0",
+      "nodes": ["node_modules/fast-xml-parser"],
+      "fixAvailable": true
+    },
+    "next": {
+      "name": "next",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": ["postcss"],
+      "effects": ["@opennextjs/aws", "@opennextjs/cloudflare"],
+      "range": ">=9.3.4-canary.0",
+      "nodes": ["node_modules/next"],
+      "fixAvailable": {
+        "name": "next",
+        "version": "9.3.3",
+        "isSemVerMajor": true
+      }
+    },
+    "postcss": {
+      "name": "postcss",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1117015,
+          "name": "postcss",
+          "dependency": "postcss",
+          "title": "PostCSS has XSS via Unescaped </style> in its CSS Stringify Output",
+          "url": "https://github.com/advisories/GHSA-qx2v-qp2m-jg93",
+          "severity": "moderate",
+          "cwe": ["CWE-79"],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": "<8.5.10"
+        }
+      ],
+      "effects": ["next"],
+      "range": "<8.5.10",
+      "nodes": ["node_modules/next/node_modules/postcss"],
+      "fixAvailable": {
+        "name": "next",
+        "version": "9.3.3",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 6,
+      "high": 0,
+      "critical": 0,
+      "total": 6
+    },
+    "dependencies": {
+      "prod": 365,
+      "dev": 396,
+      "optional": 169,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 859
+    }
+  }
+}
