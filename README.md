@@ -1,5 +1,7 @@
 # medical-extractor
 
+[![CI](https://github.com/proto-atlas/medical-extractor/actions/workflows/ci.yml/badge.svg)](https://github.com/proto-atlas/medical-extractor/actions/workflows/ci.yml)
+
 > 架空の医療文書からSOAP形式 (Subjective / Objective / Assessment / Plan) をAIで構造化抽出するデモアプリです。Anthropic Claude tool_use、Zod二重検証、Cloudflare Workersで動かしています。
 
 ## デモ
